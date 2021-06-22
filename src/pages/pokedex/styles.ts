@@ -53,22 +53,15 @@ export const Display = styled.div`
 
 export const BoxRight = styled.div`
   background-color: red;
-  width: 300px;
+  width: 400px;
   height: 350px;
   border: solid 1px;
   text-align: center;
   padding: 5px;
 
-  button {
-    margin: 0px 10px 5px 10px;
-    bottom: 0;
-    align-self: flex-end;
-    padding: 3px;
-    width: 100px;
-  }
   ul {
     display: grid;
-    grid-template-columns: 100px 100px;
+    grid-template-columns: 200px 100px;
   }
   li {
     margin: 3px auto;
@@ -76,6 +69,28 @@ export const BoxRight = styled.div`
     font-size: 16px;
     list-style-type: none;
     font-weight: 500;
+  }
+  div {
+    .Pagination-Button {
+      cursor: pointer;
+      margin: 0 3px;
+    }
+    display: flex;
+    text-align: center;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+export const PaginationButton = styled.div`
+  div {
+    cursor: pointer;
+    margin: 5px;
+    padding: 3px;
+    border: solid black 1px;
+    color: white;
+    width: 15px;
+    text-align: center;
   }
 `;
 

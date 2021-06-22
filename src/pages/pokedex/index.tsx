@@ -1,8 +1,20 @@
 /* eslint-disable camelcase */
 
 import React, { useState, useEffect } from 'react';
+import {
+  FaAngleLeft,
+  FaAngleRight,
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+} from 'react-icons/fa';
 import api from '../../services/api';
-import { Container, BoxLeft, BoxRight, Display } from './styles';
+import {
+  Container,
+  BoxLeft,
+  BoxRight,
+  Display,
+  PaginationButton,
+} from './styles';
 
 interface Pokemon {
   name: string;
@@ -25,7 +37,7 @@ interface NomesPokemons {
 }
 
 const Pokedex: React.FC = () => {
-  // states
+  // States
   const [newPokemon, setNewPokemon] = useState<Pokemon>({
     name: 'bulbasaur',
     order: 1,
@@ -44,10 +56,10 @@ const Pokedex: React.FC = () => {
   const [listPokemon, setlistPokemon] = useState<NomesPokemons[]>([]);
   const [pokemonName, setPokemonName] = useState<string>('bulbasaur');
   const [page, setPage] = useState<number>(0);
-  const [perpage, setPerpage] = useState<number>(20);
+
   const [totalPage, setTotalPage] = useState<number>(0);
 
-  // load the inicial pokemon list
+  // Load the inicial pokemon list
 
   useEffect(() => {
     const loadList = async () => {
@@ -61,7 +73,7 @@ const Pokedex: React.FC = () => {
     loadList();
   }, []);
 
-  // change the pokemon in display
+  // Change the pokemon in display
 
   useEffect(() => {
     const loadPokemon = async () => {
@@ -71,7 +83,8 @@ const Pokedex: React.FC = () => {
     loadPokemon();
   }, [pokemonName]);
 
-  // all about the list itens
+  // All about the list itens
+  const perpage = 20;
 
   useEffect(() => {
     setTotalPage(Math.ceil(listPokemon?.length / perpage));
@@ -79,7 +92,7 @@ const Pokedex: React.FC = () => {
 
   const html = document.querySelector('.list');
 
-  const create = (name: string) => {
+  const createList = (name: string) => {
     const li = document.createElement('li');
     li.innerHTML = name;
     li.onclick = () => {
@@ -88,7 +101,7 @@ const Pokedex: React.FC = () => {
     html?.appendChild(li);
   };
 
-  const update = () => {
+  const updateList = () => {
     if (html != null) {
       html.innerHTML = '';
     }
@@ -96,7 +109,7 @@ const Pokedex: React.FC = () => {
     const end = start + perpage;
     const paginatedItens = listPokemon.slice(start, end);
 
-    paginatedItens.map((e) => create(e.name));
+    paginatedItens.map((e) => createList(e.name));
   };
 
   // Pagination
@@ -106,29 +119,67 @@ const Pokedex: React.FC = () => {
     setPage((numero += 1));
     if (page > totalPage) {
       setPage((numero -= 1));
+      updateList();
     }
-    update();
+
+    updateList();
   };
   const previusPage = () => {
     let numero = page;
     setPage((numero -= 1));
     if (page < 1) {
       setPage((numero += 1));
-      update();
+      updateList();
     }
   };
 
-  update();
+  updateList();
 
-  // goTo(page: number) {
-  //   if (page < 1) {
-  //     state.page = 1;
-  //   }
-  //   state.page = page;
-  //   if (page > state.totalPage) {
-  //     state.page = state.totalPage;
-  //   }
-  // },
+  // Buttons Pagination
+
+  const divHtml = document.querySelector('.Pagination-div');
+
+  const calculateMaxVisibleButtons = () => {
+    const maxVisibleButtons = 7;
+
+    let maxLeft = page - Math.floor(maxVisibleButtons / 2);
+    let maxRight = page + Math.floor(maxVisibleButtons / 2);
+
+    if (maxLeft < 1) {
+      maxLeft = 1;
+      maxRight = maxVisibleButtons;
+    }
+
+    if (maxRight > totalPage) {
+      maxLeft = totalPage - (maxVisibleButtons - 1);
+      maxRight = totalPage;
+
+      if (maxLeft < 1) maxLeft = 1;
+    }
+    return { maxLeft, maxRight };
+  };
+
+  const createButtons = (number: string) => {
+    const button = document.createElement('div');
+    button.onclick = () => {
+      setPage(+number - 1);
+    };
+    button.innerHTML = number;
+    divHtml?.appendChild(button);
+  };
+
+  const updateButtons = () => {
+    if (divHtml != null) {
+      divHtml.innerHTML = '';
+    }
+
+    const { maxLeft, maxRight } = calculateMaxVisibleButtons();
+
+    for (let i = maxLeft; i <= maxRight; i += 1) {
+      createButtons(`${i}`);
+    }
+  };
+  updateButtons();
 
   return (
     <div>
@@ -151,22 +202,37 @@ const Pokedex: React.FC = () => {
         </BoxLeft>
         <BoxRight>
           <ul className="list" />
-          <button
-            type="button"
-            onClick={() => {
-              previusPage();
-            }}
-          >
-            previus
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              nextPage();
-            }}
-          >
-            next
-          </button>
+          <div>
+            <FaAngleDoubleLeft
+              className="Pagination-Button"
+              size={20}
+              onClick={() => {
+                setPage(0);
+              }}
+            />
+            <FaAngleLeft
+              className="Pagination-Button"
+              size={20}
+              onClick={() => {
+                previusPage();
+              }}
+            />
+            <PaginationButton className="Pagination-div" />
+            <FaAngleRight
+              className="Pagination-Button"
+              size={20}
+              onClick={() => {
+                nextPage();
+              }}
+            />
+            <FaAngleDoubleRight
+              className="Pagination-Button"
+              size={20}
+              onClick={() => {
+                setPage(totalPage - 1);
+              }}
+            />
+          </div>
         </BoxRight>
       </Container>
       )
