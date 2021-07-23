@@ -11,9 +11,26 @@ import api from '../../services/api';
 import {
   Container,
   BoxLeft,
+  BoxLeftFooter,
   BoxRight,
-  Display,
+  OutDisplay,
+  InnerDisplay,
   PaginationButton,
+  HorizontalDiv,
+  ContainerRight,
+  FooterLeft,
+  FooterCircle,
+  FooterButtons,
+  GreenRectangle,
+  ArrowButtons,
+  LeftHeader,
+  HeaderCircle,
+  LittleCircles,
+  RightDisplay,
+  ButtonsContainer,
+  Separator,
+  LineSeparator,
+  LineContainer,
 } from './styles';
 
 interface Pokemon {
@@ -84,7 +101,7 @@ const Pokedex: React.FC = () => {
   }, [pokemonName]);
 
   // All about the list itens
-  const perpage = 20;
+  const perpage = 10;
 
   useEffect(() => {
     setTotalPage(Math.ceil(listPokemon?.length / perpage));
@@ -94,7 +111,7 @@ const Pokedex: React.FC = () => {
 
   const createList = (name: string) => {
     const li = document.createElement('li');
-    li.innerHTML = name;
+    li.innerHTML = `${name[0].toUpperCase() + name.substring(1)}`;
     li.onclick = () => {
       setPokemonName(name);
     };
@@ -117,7 +134,7 @@ const Pokedex: React.FC = () => {
   const nextPage = () => {
     let numero = page;
     setPage((numero += 1));
-    if (page > totalPage) {
+    if (page > totalPage - 2) {
       setPage((numero -= 1));
       updateList();
     }
@@ -140,7 +157,7 @@ const Pokedex: React.FC = () => {
   const divHtml = document.querySelector('.Pagination-div');
 
   const calculateMaxVisibleButtons = () => {
-    const maxVisibleButtons = 7;
+    const maxVisibleButtons = 5;
 
     let maxLeft = page - Math.floor(maxVisibleButtons / 2);
     let maxRight = page + Math.floor(maxVisibleButtons / 2);
@@ -159,12 +176,16 @@ const Pokedex: React.FC = () => {
     return { maxLeft, maxRight };
   };
 
-  const createButtons = (number: string) => {
+  const createButtons = (number: number) => {
     const button = document.createElement('div');
     button.onclick = () => {
       setPage(+number - 1);
     };
-    button.innerHTML = number;
+    if (page === number - 1) {
+      button.classList.add('active');
+    }
+
+    button.innerHTML = `${number}`;
     divHtml?.appendChild(button);
   };
 
@@ -176,7 +197,7 @@ const Pokedex: React.FC = () => {
     const { maxLeft, maxRight } = calculateMaxVisibleButtons();
 
     for (let i = maxLeft; i <= maxRight; i += 1) {
-      createButtons(`${i}`);
+      createButtons(i);
     }
   };
   updateButtons();
@@ -185,55 +206,94 @@ const Pokedex: React.FC = () => {
     <div>
       <Container>
         <BoxLeft>
-          <Display>
-            <img
-              src={
-                newPokemon.sprites.other.dream_world.front_default ??
-                newPokemon.sprites.front_default
-              }
-              alt="img not avaible"
-            />
-            <h4>
-              #{newPokemon.order} {newPokemon.name}
-            </h4>
-          </Display>
-          <h3> Height : {newPokemon.height} </h3>
-          <h3>weight : {newPokemon.weight} </h3>
+          <LeftHeader>
+            <HeaderCircle />
+            <LittleCircles />
+            <LittleCircles />
+            <LittleCircles />
+            <LineContainer>
+              <div className="downLine" />
+              <div className="diagonalLine" />
+              <div className="upLine" />
+            </LineContainer>
+          </LeftHeader>
+          <OutDisplay>
+            <InnerDisplay>
+              <img
+                src={
+                  newPokemon.sprites.other.dream_world.front_default ??
+                  newPokemon.sprites.front_default
+                }
+                alt="img not avaible"
+              />
+              <h4>
+                #{newPokemon.order} {newPokemon.name.toLocaleUpperCase()}
+              </h4>
+            </InnerDisplay>
+          </OutDisplay>
+
+          <BoxLeftFooter>
+            <FooterLeft>
+              <FooterCircle className="footerCircle" />
+
+              <FooterButtons>
+                <div className="footerButton1" />
+                <div className="footerButton1" />
+              </FooterButtons>
+              <GreenRectangle>
+                <span>Height: {newPokemon.height} </span>
+                <span>Weight: {newPokemon.weight}</span>
+              </GreenRectangle>
+            </FooterLeft>
+            <ArrowButtons>
+              <div className="arrowDiagonal" />
+              <div className="arrowVertical" />
+            </ArrowButtons>
+          </BoxLeftFooter>
         </BoxLeft>
-        <BoxRight>
-          <ul className="list" />
-          <div>
-            <FaAngleDoubleLeft
-              className="Pagination-Button"
-              size={20}
-              onClick={() => {
-                setPage(0);
-              }}
-            />
-            <FaAngleLeft
-              className="Pagination-Button"
-              size={20}
-              onClick={() => {
-                previusPage();
-              }}
-            />
-            <PaginationButton className="Pagination-div" />
-            <FaAngleRight
-              className="Pagination-Button"
-              size={20}
-              onClick={() => {
-                nextPage();
-              }}
-            />
-            <FaAngleDoubleRight
-              className="Pagination-Button"
-              size={20}
-              onClick={() => {
-                setPage(totalPage - 1);
-              }}
-            />
-          </div>
-        </BoxRight>
+        <Separator>
+          <LineSeparator />
+          <LineSeparator />
+        </Separator>
+        <ContainerRight>
+          <HorizontalDiv />
+          <BoxRight>
+            <RightDisplay>
+              <ul className="list" />
+            </RightDisplay>
+            <ButtonsContainer>
+              <FaAngleDoubleLeft
+                className="Pagination-Button"
+                size={20}
+                onClick={() => {
+                  setPage(0);
+                }}
+              />
+              <FaAngleLeft
+                className="Pagination-Button"
+                size={20}
+                onClick={() => {
+                  previusPage();
+                }}
+              />
+              <PaginationButton className="Pagination-div" />
+              <FaAngleRight
+                className="Pagination-Button"
+                size={20}
+                onClick={() => {
+                  nextPage();
+                }}
+              />
+              <FaAngleDoubleRight
+                className="Pagination-Button"
+                size={20}
+                onClick={() => {
+                  setPage(totalPage - 1);
+                }}
+              />
+            </ButtonsContainer>
+          </BoxRight>
+        </ContainerRight>
       </Container>
       )
     </div>
