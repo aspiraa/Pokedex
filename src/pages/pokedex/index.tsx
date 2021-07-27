@@ -140,8 +140,7 @@ const Pokedex: React.FC = () => {
     if (filtered.length !== 0) {
       calculateTotalPage(filtered);
     } else {
-      setTotalPage(0);
-      console.log(totalPage);
+      setTotalPage(0);      
     }
   };
 
