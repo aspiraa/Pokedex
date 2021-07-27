@@ -1,13 +1,33 @@
 import styled from 'styled-components';
 
+export const Header = styled.header`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+
+  div {
+    margin-left: 40px;
+  }
+
+  img {
+    max-height: 60px;
+    margin: 0 10px;
+  }
+`;
+
 export const Container = styled.div`
   width: 800px;
   height: 500px;
-  margin: 80px auto;
   display: flex;
   align-items: flex-end;
   position: relative;
   font-family: 'Roboto', sans-serif;
+
+  .Pagination-Button {
+    cursor: pointer;
+    margin: 1px;
+  }
 `;
 
 /* Box left */
@@ -40,6 +60,7 @@ export const HeaderCircle = styled.div`
   border: solid 3px white;
   box-shadow: 0px 4px 4px 0px #00000040;
   margin: 9px 0 0 14px;
+  cursor: pointer;
 `;
 
 export const LittleCircles = styled.div`
@@ -109,6 +130,7 @@ export const InnerDisplay = styled.div`
   border-radius: 10px;
   border: solid 1px;
   overflow: hidden;
+  height: 182px;
 
   img {
     background-color: #87cefa;
@@ -189,6 +211,9 @@ export const GreenRectangle = styled.div`
   box-shadow: 0px 4px 4px 0px #00000040;
   text-align: center;
   font-size: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
 `;
 
 export const ArrowButtons = styled.div`
@@ -223,6 +248,7 @@ export const ContainerRight = styled.div`
   width: 370px;
   display: flex;
   flex-direction: column;
+  visibility: hidden;
 `;
 export const HorizontalDiv = styled.div`
   width: 195px;
@@ -238,6 +264,42 @@ export const HorizontalDiv = styled.div`
   border-bottom: solid 2px #ff1e1e;
   margin-bottom: -2px;
 `;
+/*  Form */
+
+export const Search = styled.div`
+  width: 250px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 70%;
+    transition: width 0.4s ease-in-out;
+    height: 20px;
+    border: none;
+    border-bottom: 2px solid #282828;
+    padding: 5px;
+    background: none;
+    &:focus {
+      width: 100%;
+      outline: none;
+      box-shadow: none;
+    }
+    &::placeholder {
+      color: #282828;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+  i {
+    position: relative;
+
+    left: -25px;
+    top: 1px;
+    color: #282828;
+    width: 0;
+  }
+`;
+
 export const BoxRight = styled.div`
   width: 370px;
   height: 427px;
@@ -282,6 +344,7 @@ export const ButtonsContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  min-height: 35px;
   .Pagination-div {
     cursor: pointer;
     margin: 0 3px;
@@ -310,13 +373,14 @@ export const Separator = styled.div`
   background-color: #e31414;
   position: absolute;
   border: 1px solid #000000;
-  box-shadow: 0px 4px 4px 0px #00000040;
+  box-shadow: 0px 0px 4px 0px #00000040;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  right: 50%;
+  right: 50.6%;
   z-index: 2;
+  visibility: hidden;
 `;
 
 export const LineSeparator = styled.div`
@@ -325,4 +389,80 @@ export const LineSeparator = styled.div`
   border-top: 2px solid #000000;
   border-bottom: 2px solid #000000;
   margin: 35px 0;
+`;
+
+/* Pokedex Closed */
+
+export const CloseContainer = styled.div`
+  height: 448px;
+  width: 370px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 2px;
+  z-index: 10;
+`;
+export const CloseContainerHorizontal = styled.div`
+  width: 190px;
+  overflow-x: clip;
+  align-self: flex-end;
+  border-right: solid 2px;
+  align-self: flex-end;
+`;
+
+export const CloseHorizontalDiv = styled.div`
+  width: 195px;
+  height: 27px;
+  margin: 0 0 0 20px;
+  transform: skew(-27deg);
+  z-index: 1;
+  background: #ff1e1e;
+  border: solid 4px;
+  border-bottom: #ff1e1e;
+  margin-bottom: -5px;
+`;
+
+export const CloseBoxLeft = styled.div`
+  width: 366px;
+  height: 427px;
+  background-color: #ff1e1e;
+  border: solid 2px;
+  border-top: solid 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 0 0 8px 8px;
+`;
+
+export const PokedexIcon = styled.div`
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(#ff1e1e 47%, #282828 5%, #282828 52%, #fff 53%);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 5px #282828;
+
+  div {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: white;
+    border: solid 5px #282828;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &::after {
+      width: 80%;
+      height: 80%;
+      background-color: whitesmoke;
+      content: '';
+      border: solid 1px #282828;
+      border-radius: 100%;
+      box-shadow: 0px 4px 4px 0px #00000040;
+    }
+  }
 `;

@@ -6,7 +6,11 @@ import {
   FaAngleRight,
   FaAngleDoubleRight,
   FaAngleDoubleLeft,
+  FaSearch,
 } from 'react-icons/fa';
+
+import gitLogo from '../../assets/GitHub-Icon-White-Logo.wine.svg';
+import linkedinLogo from '../../assets/LinkedIn-Wordmark-White-Logo.wine.svg';
 import api from '../../services/api';
 import {
   Container,
@@ -31,6 +35,13 @@ import {
   Separator,
   LineSeparator,
   LineContainer,
+  CloseContainer,
+  CloseContainerHorizontal,
+  CloseHorizontalDiv,
+  CloseBoxLeft,
+  PokedexIcon,
+  Search,
+  Header,
 } from './styles';
 
 interface Pokemon {
@@ -73,6 +84,8 @@ const Pokedex: React.FC = () => {
   const [listPokemon, setlistPokemon] = useState<NomesPokemons[]>([]);
   const [pokemonName, setPokemonName] = useState<string>('bulbasaur');
   const [page, setPage] = useState<number>(0);
+  const [pokedexStatus, setPokedexStatus] = useState<boolean>(true);
+  const [pokemonsFiltered, setPokemonsFiltered] = useState<NomesPokemons[]>([]);
 
   const [totalPage, setTotalPage] = useState<number>(0);
 
@@ -100,14 +113,41 @@ const Pokedex: React.FC = () => {
     loadPokemon();
   }, [pokemonName]);
 
+  // Disable default
+
+  document.getElementById('searchInput')?.addEventListener('keydown', (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+    }
+  });
+
   // All about the list itens
   const perpage = 10;
+  const html = document.querySelector('.list');
+  // Set Total page
+
+  const calculateTotalPage = (array: NomesPokemons[]) => {
+    setTotalPage(Math.ceil(array?.length / perpage));
+  };
+
+  // Filter
+  const nameFilter = (e: string) => {
+    const filtered = listPokemon.filter((p) =>
+      p.name.startsWith(e.toLowerCase()),
+    );
+    setPage(0);
+    setPokemonsFiltered(filtered);
+    if (filtered.length !== 0) {
+      calculateTotalPage(filtered);
+    } else {
+      setTotalPage(0);
+      console.log(totalPage);
+    }
+  };
 
   useEffect(() => {
-    setTotalPage(Math.ceil(listPokemon?.length / perpage));
-  }, [listPokemon, perpage]);
-
-  const html = document.querySelector('.list');
+    calculateTotalPage(listPokemon);
+  }, [listPokemon]);
 
   const createList = (name: string) => {
     const li = document.createElement('li');
@@ -118,15 +158,27 @@ const Pokedex: React.FC = () => {
     html?.appendChild(li);
   };
 
+  // calculate and list itens
+
   const updateList = () => {
     if (html != null) {
       html.innerHTML = '';
     }
     const start = page * perpage;
     const end = start + perpage;
-    const paginatedItens = listPokemon.slice(start, end);
+    let paginatedItens = listPokemon.slice(start, end);
 
-    paginatedItens.map((e) => createList(e.name));
+    if (pokemonsFiltered.length > 0) {
+      paginatedItens = pokemonsFiltered.slice(start, end);
+    }
+    if (totalPage === 0) {
+      const li = document.createElement('li');
+      li.innerHTML = 'Pokemon not found';
+      li.style.cursor = 'default';
+      html?.appendChild(li);
+      return 0;
+    }
+    return paginatedItens.map((e) => createList(e.name));
   };
 
   // Pagination
@@ -202,12 +254,71 @@ const Pokedex: React.FC = () => {
   };
   updateButtons();
 
+  /* Pokedex Closing or open */
+
+  const startPokedex = () => {
+    const boxRight = document.getElementById('BoxRight');
+    const separator = document.getElementById('Separator');
+    const closed = document.getElementById('Closed');
+    let status = 'hidden';
+
+    setPokemonName('bulbasaur');
+    setPage(0);
+    calculateTotalPage(listPokemon);
+
+    const inputValue = document.getElementById(
+      'searchInput',
+    ) as HTMLInputElement;
+
+    inputValue.value = '';
+
+    if (pokedexStatus === true && closed) {
+      setPokedexStatus(false);
+      status = 'visible';
+      closed.style.visibility = 'hidden';
+    }
+    if (pokedexStatus === false && closed) {
+      setPokedexStatus(true);
+      status = 'hidden';
+      closed.style.visibility = 'visible';
+    }
+
+    if (boxRight && separator != null) {
+      boxRight.style.visibility = status;
+      separator.style.visibility = status;
+    }
+  };
+
   return (
     <div>
+      <Header>
+        <div>
+          <a href="https://github.com/aspiraa/Pokedex">
+            <img src={gitLogo} alt="Github" />
+          </a>
+          <a href="https://www.linkedin.com/in/tulio-moreira-b35141205/">
+            <img src={linkedinLogo} alt="Linkedin" />
+          </a>
+        </div>
+      </Header>
       <Container>
         <BoxLeft>
+          <CloseContainer id="Closed">
+            <CloseContainerHorizontal>
+              <CloseHorizontalDiv />
+            </CloseContainerHorizontal>
+            <CloseBoxLeft>
+              <PokedexIcon>
+                <div />
+              </PokedexIcon>
+            </CloseBoxLeft>
+          </CloseContainer>
           <LeftHeader>
-            <HeaderCircle />
+            <HeaderCircle
+              onClick={() => {
+                startPokedex();
+              }}
+            />
             <LittleCircles />
             <LittleCircles />
             <LittleCircles />
@@ -251,13 +362,25 @@ const Pokedex: React.FC = () => {
             </ArrowButtons>
           </BoxLeftFooter>
         </BoxLeft>
-        <Separator>
+        <Separator id="Separator">
           <LineSeparator />
           <LineSeparator />
         </Separator>
-        <ContainerRight>
+        <ContainerRight id="BoxRight">
           <HorizontalDiv />
           <BoxRight>
+            <Search>
+              <input
+                type="text"
+                id="searchInput"
+                autoComplete="off"
+                placeholder="Pokemon Name"
+                onChange={(e) => nameFilter(e.target.value)}
+              />
+              <i>
+                <FaSearch />
+              </i>
+            </Search>
             <RightDisplay>
               <ul className="list" />
             </RightDisplay>
@@ -295,7 +418,6 @@ const Pokedex: React.FC = () => {
           </BoxRight>
         </ContainerRight>
       </Container>
-      )
     </div>
   );
 };
