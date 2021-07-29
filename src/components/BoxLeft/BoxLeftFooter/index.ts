@@ -1,1 +1,0 @@
-export { BoxLeftFooter } from './BoxLeftFooter';

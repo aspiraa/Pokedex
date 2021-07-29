@@ -1,1 +1,0 @@
-export { BoxRight } from './BoxRight';

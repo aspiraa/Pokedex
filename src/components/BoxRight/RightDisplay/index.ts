@@ -1,1 +1,0 @@
-export { RightDisplay } from './RightDisplay';
