@@ -26,7 +26,7 @@ const Pokedex: React.FC = () => {
   // Load the inicial pokemon list
 
   useEffect(() => {
-    const load = async () => {
+    const loadList = async () => {
       const { data } = await api.get('?limit=1118&offset=0');
       const pokemons: NomesPokemons[] = listPokemon
         ? [...listPokemon, ...data.results]
@@ -34,7 +34,7 @@ const Pokedex: React.FC = () => {
 
       setlistPokemon(pokemons);
     };
-    load();
+    loadList();
   }, []);
 
   // Disable default
