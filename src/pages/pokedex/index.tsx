@@ -75,6 +75,8 @@ const Pokedex: React.FC = () => {
           pokemonName={pokemonName}
           setPage={setPage}
           setPokemonName={setPokemonName}
+          setTotalPage={setTotalPage}
+          totalPage={totalPage}
         />
         <Separator />
         <BoxRight

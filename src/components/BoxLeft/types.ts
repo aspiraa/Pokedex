@@ -3,8 +3,10 @@ export interface IProps {
   children?: string;
   pokemonName: string;
   listPokemon: NomesPokemons[];
+  totalPage: number;
   setPokemonName: React.Dispatch<React.SetStateAction<string>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  setTotalPage: React.Dispatch<React.SetStateAction<number>>;
   calculateTotalPage?: (array: NomesPokemons[]) => void;
 }
 

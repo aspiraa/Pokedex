@@ -11,6 +11,9 @@ import { IProps, Pokemon } from './types';
 export const BoxLeft = ({
   setPage,
   setPokemonName,
+  setTotalPage,
+  totalPage,
+  calculateTotalPage,
   pokemonName,
 }: IProps): JSX.Element => {
   /* States */
@@ -58,6 +61,7 @@ export const BoxLeft = ({
     ) as HTMLInputElement;
 
     inputValue.value = '';
+    setTotalPage(-1);
 
     if (pokedexStatus === true && closed) {
       setPokedexStatus(false);

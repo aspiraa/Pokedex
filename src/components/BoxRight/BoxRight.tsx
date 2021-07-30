@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Buttons } from './Buttons';
 import { RightDisplay } from './RightDisplay';
@@ -32,6 +32,7 @@ export const BoxRight = ({
   };
 
   // make the limit of elements in display
+  const inputValue = document.getElementById('searchInput') as HTMLInputElement;
 
   const updateList = () => {
     if (html != null) {
@@ -41,7 +42,7 @@ export const BoxRight = ({
     const end = start + perpage;
     let paginatedItens = listPokemon.slice(start, end);
 
-    if (pokemonsFiltered.length > 0) {
+    if (pokemonsFiltered.length > 0 && inputValue.value !== '') {
       paginatedItens = pokemonsFiltered.slice(start, end);
     }
     if (totalPage === 0) {
@@ -56,6 +57,12 @@ export const BoxRight = ({
 
   updateList();
 
+  useEffect(() => {
+    if (totalPage === -1) {
+      calculateTotalPage(listPokemon);
+    }
+    updateList();
+  }, [totalPage]);
   return (
     <ContainerRight id="BoxRight">
       <HorizontalDiv />
