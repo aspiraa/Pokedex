@@ -6,13 +6,12 @@ import { CloseContainer } from './CloseContainer';
 import { Container } from './styles';
 import api from '../../services/api';
 
-import { IProps, NomesPokemons, Pokemon } from './types';
+import { IProps, Pokemon } from './types';
 
 export const BoxLeft = ({
   setPage,
   setPokemonName,
   pokemonName,
-  listPokemon,
 }: IProps): JSX.Element => {
   /* States */
 
@@ -53,7 +52,6 @@ export const BoxLeft = ({
 
     setPokemonName('bulbasaur');
     setPage(0);
-    // calculateTotalPage(listPokemon);
 
     const inputValue = document.getElementById(
       'searchInput',
