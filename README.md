@@ -28,7 +28,7 @@ A parte visual da pokedex é basicamente composta por Css exceto por alguns íco
   yarn start
  ```
 
-# Author
+# Autor
 
 Tulio moreira costa
 
